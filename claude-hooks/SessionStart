@@ -1,0 +1,26 @@
+#!/usr/bin/env bash
+# Claude Code SessionStart hook for agent-inbox-gitee.
+#
+# Parse stdin JSON to get cwd, then run pull-comments.py for this project.
+# Best-effort: failures never block session start.
+
+set -uo pipefail
+
+HOOK_INPUT=""
+if [ ! -t 0 ]; then HOOK_INPUT="$(cat)"; fi
+
+CWD=""
+if [[ -n "$HOOK_INPUT" ]]; then
+  CWD="$(printf '%s' "$HOOK_INPUT" | python3 -c '
+import sys, json
+try:
+    print(json.load(sys.stdin).get("cwd", ""))
+except Exception:
+    pass
+' 2>/dev/null)"
+fi
+CWD="${CWD:-$PWD}"
+
+SKILL_ROOT="${AGENT_INBOX_GITEE_ROOT:-$HOME/.claude/skills/agent-inbox-gitee}"
+
+"$SKILL_ROOT/bin/pull-comments.py" --cwd "$CWD" >/dev/null 2>&1 || true

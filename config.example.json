@@ -1,0 +1,29 @@
+{
+  "_comment": "Copy to config.json. $ prefix = env var expansion.",
+
+  "gitee": {
+    "enterprise_id": 14406717,
+    "token": "$GITEE_TOKEN",
+    "_comment_self": "Self user id (numeric) for assignee/author filter. Look up via lark-cli OR mcp_gitee.get_user_info.",
+    "self_user_id": 8749937,
+    "self_username": "langgexyz"
+  },
+
+  "watch": {
+    "assignee": true,
+    "author": true,
+    "labels": []
+  },
+
+  "window": {
+    "hours": 6,
+    "_comment": "拉 max_issues 个最近 update 的 issue，每个 max_comments 条；超出截断。"
+  },
+
+  "limits": {
+    "max_issues": 20,
+    "max_comments_per_issue": 10
+  },
+
+  "exclude_self_comments": true
+}
