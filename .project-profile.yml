@@ -1,0 +1,25 @@
+# 本仓（agent-inbox-gitee）自身的项目元信息（DI 注入源）。
+#
+# 为什么必须有（IK5PXO 撞到）：本仓是独立 git 仓，但在开发机上物理位置嵌在 ~/.claude 仓
+# 里面（~/.claude/skills/agent-inbox-gitee）。profile 解析按目录向上走查、近者胜——本仓
+# 没有这份文件时，走查会一路走到 ~/.claude/.project-profile.yml 命中，把那边的值当成自己
+# 的。实际后果：merge-gate 拿到 ~/.claude 的 `gates.merge.test_command`
+# （bash tools/merge-gate-run.sh）在本仓跑，脚本不存在 → exit 127 → 本仓合不进任何东西。
+# 仓自报家门是唯一干净的解法（同 agent-infra / agent-skills 的做法）。
+#
+# 完整可注入项见 project-profile skill；校验注入是否齐: profile check <skill>
+repo:
+  dev_branch: main
+
+# issue.id_pattern 有意留空：本仓不绑单一 tracker，wt / commit hook 走内置的多平台弱约定
+# （Gitee 企业式 / Jira 式 / GitHub #ref）。使用方按自己的 tracker 形状显式注入。
+
+# 本仓没有自带测试面：git-tracked 的内容只有 .py / .sh / .json / .md，merge-gate 的
+# gate_generic（py_compile / bash -n / JSON / YAML 语法级校验 + 拒源代码文件）正是对的档位。
+#
+# 空字符串 = 显式声明「本仓不接管测试，交给 gate_generic」，与「不写这个 key」语义不同：
+# 不写会继续向上走查、继承到跑不通的命令（就是上面那个 exit 127）。
+# 哪天本仓真有了测试，把入口命令填进来即可（契约：在仓根执行，退出码 0 = 绿）。
+gates:
+  merge:
+    test_command: ""
