@@ -47,7 +47,10 @@ shopt -u nullglob
 # 两种「跑不成」分开：找不到脚本 = 只 clone 了本仓的环境，预期内，跳过并说明；
 # 找到但跑红 = 真失败，拦。
 E2E_VERIFY="${CLAUDE_HOME:-$HOME/.claude}/bootstrap/e2e-verify.sh"
-E2E_TRIGGER='(^|/)install\.sh$|(^|/)uninstall\.sh$|(^|/)setup\.sh$|(^|/)resident-root-guard\.sh$'
+# selftest 也算装机面（IK5T07）：本仓的 install.sh / setup.sh 会跑自己的 selftest，红了就
+# exit 1，于是改 selftest 一样能让仓装不上。IK5SWN 那次退化改的正是某个 selftest，而当时
+# 六处触发面都不含它，merge-gate 没跑 e2e，退化一路合进 main。
+E2E_TRIGGER='(^|/)install\.sh$|(^|/)uninstall\.sh$|(^|/)setup\.sh$|(^|/)resident-root-guard\.sh$|selftest'
 CHANGED="$(git diff --name-only origin/main...HEAD 2>/dev/null || true)"
 if [ "${E2E_VERIFY_FORCE:-0}" = "1" ] || echo "$CHANGED" | grep -qE "$E2E_TRIGGER"; then
   if [ -x "$E2E_VERIFY" ]; then
