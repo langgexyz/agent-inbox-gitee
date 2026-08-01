@@ -3,7 +3,7 @@
 
 set -euo pipefail
 
-SKILL_DIR="$(cd "$(dirname "$0")/.." && pwd)"
+SKILL_DIR="${AGENT_INBOX_GITEE_ROOT:-$(cd "$(dirname "$0")/.." && pwd -P)}"
 SETTINGS_FILE="$HOME/.claude/settings.json"
 HOOK_PATH="$SKILL_DIR/claude-hooks/SessionStart"
 
@@ -11,6 +11,14 @@ info() { echo "info: $*"; }
 ok()   { echo "ok: $*"; }
 warn() { echo "warning: $*"; }
 fail() { echo "error: $*" >&2; exit 1; }
+
+# 0.5 预检：SKILL_DIR 必须是仓的常驻位置，不能是 worktree / 临时副本（IK5Q3Z）
+#
+# 下面第 4 段把 $HOOK_PATH 写进 ~/.claude/settings.json，那是全机每个会话都读的配置。
+# 判据与逃生口跟 uninstall.sh 共用同一份，见 scripts/resident-root-guard.sh。
+# shellcheck source=scripts/resident-root-guard.sh
+. "$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd -P)/resident-root-guard.sh"
+require_resident_root "$SKILL_DIR" "install.sh" "~/.claude/settings.json 的 SessionStart hook 注册"
 
 # 1. deps
 command -v python3 >/dev/null || fail "python3 not in PATH"

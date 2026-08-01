@@ -14,12 +14,11 @@ repo:
 # issue.id_pattern 有意留空：本仓不绑单一 tracker，wt / commit hook 走内置的多平台弱约定
 # （Gitee 企业式 / Jira 式 / GitHub #ref）。使用方按自己的 tracker 形状显式注入。
 
-# 本仓没有自带测试面：git-tracked 的内容只有 .py / .sh / .json / .md，merge-gate 的
-# gate_generic（py_compile / bash -n / JSON / YAML 语法级校验 + 拒源代码文件）正是对的档位。
+# 本仓的测试面入口（IK5Q3Z 起本仓真有了自测，从空字符串换成真命令）。契约：在仓根执行，
+# 退出码 0 = 绿。resident-root-guard.selftest 全程假 HOME，不碰真实 ~/.claude/settings.json。
 #
-# 空字符串 = 显式声明「本仓不接管测试，交给 gate_generic」，与「不写这个 key」语义不同：
-# 不写会继续向上走查、继承到跑不通的命令（就是上面那个 exit 127）。
-# 哪天本仓真有了测试，把入口命令填进来即可（契约：在仓根执行，退出码 0 = 绿）。
+# 注意语义：空字符串 = 显式声明「本仓不接管测试，交给 gate_generic」，与「不写这个 key」
+# 不同 —— 不写会继续向上走查、继承到跑不通的命令（上面那个 exit 127）。
 gates:
   merge:
-    test_command: ""
+    test_command: bash scripts/resident-root-guard.selftest.sh
