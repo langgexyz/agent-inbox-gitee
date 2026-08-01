@@ -46,12 +46,17 @@ def load_config() -> dict:
         sys.exit(1)
     with open(CONFIG_PATH) as f:
         c = json.load(f)
-    token = c.get("gitee", {}).get("token", "")
-    if isinstance(token, str) and token.startswith("$"):
-        c["gitee"]["token"] = os.environ.get(token[1:], "")
-    if not c.get("gitee", {}).get("token"):
-        log("error", "gitee.token empty after env expand — check config.json")
-        sys.exit(1)
+    gitee = c.get("gitee", {})
+    # "$VAR" 形式的值一律从环境读。org 耦合值（token / enterprise_id）不写死在
+    # 示例配置里，这样仓可以公开分发。
+    for key in ("token", "enterprise_id"):
+        v = gitee.get(key)
+        if isinstance(v, str) and v.startswith("$"):
+            gitee[key] = os.environ.get(v[1:], "")
+    for key in ("token", "enterprise_id"):
+        if not gitee.get(key):
+            log("error", f"gitee.{key} empty after env expand — check config.json")
+            sys.exit(1)
     return c
 
 

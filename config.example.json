@@ -2,7 +2,8 @@
   "_comment": "Copy to config.json. $ prefix = env var expansion.",
 
   "gitee": {
-    "enterprise_id": 14406717,
+    "_comment_ent": "Enterprise id (numeric) or \"$VAR\" to read it from the environment.",
+    "enterprise_id": "$GITEE_ENTERPRISE_ID",
     "token": "$GITEE_TOKEN",
     "_comment_self": "Self user id (numeric) for assignee/author filter. Look up via lark-cli OR mcp_gitee.get_user_info.",
     "self_user_id": 8749937,
