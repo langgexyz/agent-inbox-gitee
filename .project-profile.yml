@@ -21,4 +21,6 @@ repo:
 # 不同 —— 不写会继续向上走查、继承到跑不通的命令（上面那个 exit 127）。
 gates:
   merge:
-    test_command: bash scripts/resident-root-guard.selftest.sh
+    # 指聚合入口而不是单个 selftest（IK5R86）：加第二个测试时不用改本文件，
+    # 且那里才有地方挂「装机面被改动时跑全栈端到端」的条件触发。
+    test_command: bash tools/merge-gate-run.sh
