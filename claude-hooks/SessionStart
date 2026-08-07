@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# Claude Code SessionStart hook for agent-inbox-gitee.
+# Claude Code SessionStart hook for tracker-inbox.
 #
 # Parse stdin JSON to get cwd, then run pull-comments.py for this project.
 # Best-effort: failures never block session start.
@@ -21,6 +21,6 @@ except Exception:
 fi
 CWD="${CWD:-$PWD}"
 
-SKILL_ROOT="${AGENT_INBOX_GITEE_ROOT:-$HOME/.claude/skills/agent-inbox-gitee}"
+SKILL_ROOT="${TRACKER_INBOX_ROOT:-$HOME/.claude/skills/tracker-inbox}"
 
 "$SKILL_ROOT/bin/pull-comments.py" --cwd "$CWD" >/dev/null 2>&1 || true

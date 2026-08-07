@@ -44,7 +44,7 @@ command -v jq >/dev/null 2>&1 || { echo "FAIL: 需要 jq（install.sh 用它改 
 . "$REPO/scripts/resident-root-guard.sh"
 GUARD="$REPO/.selftest-guard-root"
 if _resident_root_is_temp "$GUARD"; then
-  GUARD="$HOME/.claude/.selftest-guard-agent-inbox-gitee-$$"
+  GUARD="$HOME/.claude/.selftest-guard-tracker-inbox-$$"
 fi
 rm -rf "$GUARD"
 trap 'rm -rf "$GUARD"' EXIT

@@ -8,7 +8,7 @@ Fetch Gitee enterprise issue comments where:
   - comment author != self (configurable)
 
 Write the formatted summary to <cwd>/.claude/MainAgentContext.md inside
-agent-inbox-gitee:start/end marker block. Stdlib only (urllib + json).
+tracker-inbox:start/end marker block（旧名 agent-inbox-gitee 的 marker 兼容读取）. Stdlib only (urllib + json).
 
 Usage:
   pull-comments.py [--cwd PATH] [--hours N] [--dry-run]

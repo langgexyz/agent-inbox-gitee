@@ -1,9 +1,9 @@
 ---
-name: agent-inbox-gitee
+name: tracker-inbox
 description: SessionStart hook 拉 Gitee 最近 6h 新评论 → 写到当前项目 .claude/MainAgentContext.md，agent 启动就看到 user 在 飞书/Gitee 留的话。配 agent-inbound-feishu (Phase 3b) 形成 inbound 闭环。触发：拉 Gitee 评论 / SessionStart inbox / 看新评论 / agent inbox
 ---
 
-# agent-inbox-gitee
+# tracker-inbox
 
 每次 Claude Code 窗口启动时，hook 拉 user 关心的 Gitee issue 最近 6h 新评论，写到 cwd 项目的 `.claude/MainAgentContext.md` 里。Agent 看 MainAgentContext.md 时自然看到，主动响应。
 
@@ -22,7 +22,7 @@ description: SessionStart hook 拉 Gitee 最近 6h 新评论 → 写到当前项
        ↓
 [渲染 markdown 段]
        ↓
-[原子更新 <cwd>/.claude/MainAgentContext.md 的 agent-inbox-gitee:start/end marker 块]
+[原子更新 <cwd>/.claude/MainAgentContext.md 的 tracker-inbox:start/end marker 块]
 
 后续 user 看 MainAgentContext.md 或 agent 启动后 load-status.sh hook 自动 cat 前 40 行，新评论入 context。
 ```
@@ -30,8 +30,8 @@ description: SessionStart hook 拉 Gitee 最近 6h 新评论 → 写到当前项
 ## 安装
 
 ```bash
-git clone https://github.com/langgexyz/agent-inbox-gitee.git ~/.claude/skills/agent-inbox-gitee
-cd ~/.claude/skills/agent-inbox-gitee
+git clone https://github.com/langgexyz/tracker-inbox.git ~/.claude/skills/tracker-inbox
+cd ~/.claude/skills/tracker-inbox
 cp config.example.json config.json
 vim config.json  # 填 GITEE_TOKEN + self_username + enterprise_id
 ./scripts/install.sh
@@ -47,7 +47,7 @@ install.sh 做的事：
 ## 卸载
 
 ```bash
-~/.claude/skills/agent-inbox-gitee/scripts/uninstall.sh
+~/.claude/skills/tracker-inbox/scripts/uninstall.sh
 ```
 
 unregister hook 从 settings.json。config.json 保留。
@@ -57,7 +57,7 @@ unregister hook 从 settings.json。config.json 保留。
 被替换的部分由 marker 包：
 
 ```markdown
-<!-- agent-inbox-gitee:start -->
+<!-- tracker-inbox:start -->
 ## 最近 Gitee 评论（截至 2026-05-15 18:30，覆盖 6h）
 
 - **IJNOWO** 张三 (1h ago): "我要再加一个功能 X..."
@@ -65,7 +65,7 @@ unregister hook 从 settings.json。config.json 保留。
 - **IJNMRR** 王五 (5h ago): "e2e 测了下，飞书消息收到"
 
 无 → "近 6h 无新评论"
-<!-- agent-inbox-gitee:end -->
+<!-- tracker-inbox:end -->
 ```
 
 agent 看到这段后该主动 say "看了下你最近评论，先处理 IJNOWO 吧"。
@@ -96,8 +96,8 @@ assignee + author 两路并集，去重。
 | skill | 关系 |
 |---|---|
 | `agent-inbound-feishu` (Phase 3b) | 飞书 reply 落到 Gitee comment，本 skill 拉 Gitee comment 进 context；闭环 |
-| `agent-notify` (Phase 3a) | 反向：agent 主动发飞书 |
-| `agent-infra` | 提供 SessionStart hook 注册基础设施（settings.json patch 模式）|
+| `agent-feishu-notify` (Phase 3a) | 反向：agent 主动发飞书 |
+| `agent-eventlog` | 提供 SessionStart hook 注册基础设施（settings.json patch 模式）|
 
 ## 后续 phase
 
