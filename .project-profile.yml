@@ -1,7 +1,7 @@
-# 本仓（agent-inbox-gitee）自身的项目元信息（DI 注入源）。
+# 本仓（tracker-inbox）自身的项目元信息（DI 注入源）。
 #
 # 为什么必须有（IK5PXO 撞到）：本仓是独立 git 仓，但在开发机上物理位置嵌在 ~/.claude 仓
-# 里面（~/.claude/skills/agent-inbox-gitee）。profile 解析按目录向上走查、近者胜——本仓
+# 里面（~/.claude/skills/tracker-inbox）。profile 解析按目录向上走查、近者胜——本仓
 # 没有这份文件时，走查会一路走到 ~/.claude/.project-profile.yml 命中，把那边的值当成自己
 # 的。实际后果：merge-gate 拿到 ~/.claude 的 `gates.merge.test_command`
 # （bash tools/merge-gate-run.sh）在本仓跑，脚本不存在 → exit 127 → 本仓合不进任何东西。

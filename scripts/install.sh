@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# agent-inbox-gitee install.sh
+# tracker-inbox install.sh
 
 set -euo pipefail
 

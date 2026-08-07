@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# agent-inbox-gitee uninstall.sh
+# tracker-inbox uninstall.sh
 # Remove SessionStart hook from ~/.claude/settings.json. Keeps config.json.
 
 set -uo pipefail

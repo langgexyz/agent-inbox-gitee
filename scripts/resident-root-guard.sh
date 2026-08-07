@@ -55,7 +55,7 @@ _resident_root_hint() {  # _resident_root_hint <path> -> stdout 常驻位置绝�
       return 0
     fi
   fi
-  printf '%s\n' "$HOME/.claude/skills/agent-inbox-gitee"
+  printf '%s\n' "$HOME/.claude/skills/tracker-inbox"
 }
 
 # 主入口。不满足就 `exit 1`（fail-closed）——写歪的全局配置比装不上难发现得多。
